@@ -1,0 +1,202 @@
+<html>
+<head>
+    <title>Socket chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="center">
+    <div class="contacts">
+<!--        <i class="fas fa-bars fa-2x"></i>-->
+        <i class="fas fa-plus-circle fa-2x" id="btn-add-contact"></i>
+        <h2>
+            Contacts
+        </h2>
+
+        <div id="contact-add-form" class="contact-add-form">
+            <form class="form">
+                <div class="input">
+                    <input placeholder="Nick name" type="text" title="Nick name"/>
+                </div>
+<!--                <div class="input">-->
+<!--                    <input placeholder="Email" type="text" title="email"/>-->
+<!--                </div>-->
+                <br>
+                <button class="btn-join p-center" type="submit">Join</button>
+            </form>
+        </div>
+
+        <div id="contacts-list">
+            <div class="contact">
+                <div class="pic rogers"></div>
+                <div class="badge">
+                    14
+                </div>
+                <div class="name">
+                    Steve Rogers
+                </div>
+                <div class="message">
+                    That is America's ass 🇺🇸🍑
+                </div>
+            </div>
+            <div class="contact">
+                <div class="pic stark"></div>
+                <div class="name">
+                    Tony Stark
+                </div>
+                <div class="message">
+                    Uh, he's from space, he came here to steal a necklace from a wizard.
+                </div>
+            </div>
+            <div class="contact">
+                <div class="pic banner"></div>
+                <div class="badge">
+                    1
+                </div>
+                <div class="name">
+                    Bruce Banner
+                </div>
+                <div class="message">
+                    There's an Ant-Man *and* a Spider-Man?
+                </div>
+            </div>
+            <div class="contact">
+                <div class="pic thor"></div>
+                <div class="name">
+                    Thor Odinson
+                </div>
+                <div class="badge">
+                    3
+                </div>
+                <div class="message">
+                    I like this one
+                </div>
+            </div>
+            <div class="contact">
+            <div class="pic danvers"></div>
+            <div class="badge">
+                2
+            </div>
+            <div class="name">
+                Carol Danvers
+            </div>
+            <div class="message">
+                Hey Peter Parker, you got something for me?
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="chat">
+        <div class="contact bar">
+            <div class="pic stark"></div>
+            <div class="name">
+                Tony Stark
+            </div>
+            <div class="seen">
+                Today at 12:56
+            </div>
+        </div>
+        <div class="messages" id="chat">
+            <div class="time">
+                Today at 11:41
+            </div>
+            <div class="message parker">
+                Hey, man! What's up, Mr Stark? 👋
+            </div>
+            <div class="message stark">
+                Kid, where'd you come from?
+            </div>
+            <div class="message parker">
+                Field trip! 🤣
+            </div>
+            <div class="message parker">
+                Uh, what is this guy's problem, Mr. Stark? 🤔
+            </div>
+            <div class="message stark">
+                Uh, he's from space, he came here to steal a necklace from a wizard.
+            </div>
+            <div class="message stark">
+                <div class="typing typing-1"></div>
+                <div class="typing typing-2"></div>
+                <div class="typing typing-3"></div>
+            </div>
+        </div>
+        <div class="input">
+            <i class="fas fa-camera"></i>
+            <i class="far fa-laugh-beam"></i>
+            <input placeholder="Type your message here!" type="text" title="message" id="input-message"/>
+            <i class="fas fa-paper-plane" id="btn-send"></i>
+        </div>
+    </div>
+<!--    <div class="rooms">-->
+<!--        <i class="fas fa-bars fa-2x"></i>-->
+<!--        <h2>-->
+<!--            Rooms-->
+<!--        </h2>-->
+<!--        <div class="contact">-->
+<!--            <div class="pic rogers"></div>-->
+<!--            <div class="badge">-->
+<!--                14-->
+<!--            </div>-->
+<!--            <div class="name">-->
+<!--                Steve Rogers-->
+<!--            </div>-->
+<!--            <div class="message">-->
+<!--                That is America's ass 🇺🇸🍑-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="contact">-->
+<!--            <div class="pic stark"></div>-->
+<!--            <div class="name">-->
+<!--                Tony Stark-->
+<!--            </div>-->
+<!--            <div class="message">-->
+<!--                Uh, he's from space, he came here to steal a necklace from a wizard.-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="contact">-->
+<!--            <div class="pic banner"></div>-->
+<!--            <div class="badge">-->
+<!--                1-->
+<!--            </div>-->
+<!--            <div class="name">-->
+<!--                Bruce Banner-->
+<!--            </div>-->
+<!--            <div class="message">-->
+<!--                There's an Ant-Man *and* a Spider-Man?-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="contact">-->
+<!--            <div class="pic thor"></div>-->
+<!--            <div class="name">-->
+<!--                Thor Odinson-->
+<!--            </div>-->
+<!--            <div class="badge">-->
+<!--                3-->
+<!--            </div>-->
+<!--            <div class="message">-->
+<!--                I like this one-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="contact">-->
+<!--            <div class="pic danvers"></div>-->
+<!--            <div class="badge">-->
+<!--                2-->
+<!--            </div>-->
+<!--            <div class="name">-->
+<!--                Carol Danvers-->
+<!--            </div>-->
+<!--            <div class="message">-->
+<!--                Hey Peter Parker, you got something for me?-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/chat.js"></script>
+</body>
+</html>
