@@ -4,6 +4,7 @@
   "description": "socket.io chat tutorial",
   "main": "index.js",
   "scripts": {
+    "server": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Anuj Sharma",
@@ -12,5 +13,8 @@
     "express": "^4.17.1",
     "socket.io": "^3.0.4",
     "validate.js": "^0.13.1"
+  },
+  "engines": {
+    "node": "15.5"
   }
 }
