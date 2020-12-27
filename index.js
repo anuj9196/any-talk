@@ -7,6 +7,8 @@ const validator = require('./validators/validator');
 const utils = require('./utils/utils');
 const functions = require('./functions');
 
+const PORT = process.env.PORT || 3000;
+
 const rooms = [];
 const users = {};
 const usersInRooms = [];
@@ -145,6 +147,6 @@ io.on('connection', (socket) => {
     });
 });
 
-http.listen(3000, () => {
-   console.log('Server running at port: 3000');
+http.listen(PORT, () => {
+   console.log(`Server running at port: ${PORT}`);
 });
