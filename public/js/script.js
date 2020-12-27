@@ -115,19 +115,43 @@ $(function () {
     socket.on('rooms update', (data) => {
         console.log('rooms received: ', data);
 
-        // // Clear content
-        // roomsItem.html('');
-        // // Add room
-        // roomsItem.append(
-        //     '<div class="contact">' +
-        //     '<div class="pic"><img alt="" src="' + users[i].avatar + '"></div>' +
-        //     `<div class="badge ${users[i].online ? 'online' : 'offline'}"></div>` +
-        //     `<div class="name">${users[i].display_name}</div>` +
-        //     '<div class="message">' +
-        //     '' +
-        //     '</div>' +
-        //     '</div>'
-        // );
+        if (data.length) {
+            roomsItem.html('');
+            roomAddForm.hide();
+            roomsList.show();
+            noRoom.hide();
+            roomsItem.show();
+
+            for (let i = 0; i < data.length; i++) {
+                roomsItem.append(
+                    `<div class="contact room ${data[i].name}">` +
+                    '<div class="pic"><img alt="" src="/icons/room_' + data[i].icon + '.svg"> </div>' +
+                    `<div class="name">${data[i].name}</div>` +
+                    '<div class="message"></div>' +
+                    '</div>'
+                );
+            }
+        }
+    });
+
+    socket.on('room join error', (data) => {
+        console.error('Error joining room: ', data);
+    });
+
+    socket.on('room joined', (data) => {
+        console.log('You joined the room: ', data);
+        $('.room').removeClass('selected');
+        $(`.room ${data.name}`).addClass('selected');
+    });
+
+    $(document).on('click', '.room', (e) => {
+        console.log('room clicked: ', $(e.target).closest('.name').text());
+        const roomName = $(e.target).closest('.name').text();
+        if (roomName) {
+            socket.emit('join room', roomName);
+        } else {
+            console.error('Room name is empty');
+        }
     });
 
     socket.on('user offline', (data) => {
@@ -182,6 +206,20 @@ $(function () {
         roomAddForm.toggle();
         roomsList.toggle();
     })
+
+    socket.on('room create error', (data) => {
+        console.log('room create error: ', data);
+    });
+
+    $('#room-join-submit').click((e) => {
+        e.preventDefault();
+        const d = roomAddForm.find('form').serializeArray();
+        socket.emit('create room', d);
+    });
+    // $('#room-join-submit).submit((e) => {
+    //     console.log('form submit: ', $(this)[0].serializeArray());
+    //     e.preventDefault();
+    // });
 
     // $('#btn-add-contact').click(() => {
     //     console.log('clicked: ');

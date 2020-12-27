@@ -31,11 +31,11 @@ exports.roomRules = {
 };
 
 exports.userRoomRule = {
-    user_index: {
+    user_nickname: {
         presence: true,
         numericality: 'onlyInteger'
     },
-    room_index: {
+    room_name: {
         presence: true,
         numericality: 'onlyInteger'
     }

@@ -64,6 +64,7 @@ io.on('connection', (socket) => {
             socket.user = user;
             functions.chatJoined(io, socket, user);
             functions.updateContact(io, socket, users);
+            io.emit('rooms update', rooms);
         } else {
             io.emit('invalid user');
         }
@@ -88,7 +89,7 @@ io.on('connection', (socket) => {
     // Join new chat
     socket.on('join chat', (data) => {
         // Convert array to object
-        const user = utils.serializeUser(data);
+        const user = utils.serializeForm(data);
 
         // In case of validation error
         if (user instanceof Error) {
@@ -111,7 +112,7 @@ io.on('connection', (socket) => {
 
         // Validate of user already exists
         const uE = Object.values(users).filter(u => {
-            return u.nickname === user.nickname
+            return u.nickname === user.nickname;
         });
 
         if (uE.length > 0) {
@@ -134,12 +135,53 @@ io.on('connection', (socket) => {
         functions.chatJoined(io, socket, user);
         functions.updateContact(io, socket, users);
         socket.user = user;
+        io.emit('rooms update', rooms);
         return true;
     });
 
     // Create room
     socket.on('create room', (data) => {
+        const roomData = utils.serializeForm(data);
+        console.log('creating room: ', data);
 
+        // In case of validation error
+        if (roomData instanceof Error) {
+            socket.emit('room create error', roomData);
+            return false;
+        }
+
+        // Validate user rules
+        const v = validate(roomData, validator.roomRules);
+
+        if (v) {
+            io.emit('room create error', v);
+            return false;
+        }
+
+        // Validate of user already exists
+        const uE = Object.values(rooms).filter(u => {
+            return u.name === roomData.name;
+        });
+
+        if (uE.length > 0) {
+            io.emit('room create error', {
+                'name': ['Room already exists']
+            });
+            return false;
+        }
+
+        Object.assign(roomData, {
+            creator: socket.user.nickname,
+            icon: Math.floor(Math.random() * 10) + 1
+        });
+
+        // Push to rooms
+        rooms.push(roomData);
+        io.emit('rooms update', rooms);
+
+        // Join the room
+        socket.join(roomData.name);
+        socket.emit('room joined', roomData);
     });
 
     // Delete room
@@ -149,7 +191,34 @@ io.on('connection', (socket) => {
 
     // Join a room
     socket.on('join room', (data) => {
+        console.log('joining room: ', data);
+        // Check if room exists
+        const roomIndex = rooms.findIndex(r => {
+            return r.name === data;
+        });
 
+        if (roomIndex === -1) {
+            socket.emit('room join error', `No room found: ${data}`);
+            return false;
+        }
+
+        // Check if user user is not in the room
+        const uRIndex = usersInRooms.findIndex(uR => {
+            return uR.nickname === socket.user.nickname && uR.name === data;
+        })
+        if (uRIndex > -1) {
+            // User already in the room
+        } else {
+            // Join the room
+            usersInRooms.push({
+                user_nickname: socket.user.nickname,
+                room_name: data
+            });
+
+            // Join the room
+            socket.join(data);
+            socket.emit('room joined', data);
+        }
     });
 
     socket.on('logout', () => {

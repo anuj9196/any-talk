@@ -1,4 +1,4 @@
-exports.serializeUser = (data) => {
+exports.serializeForm = (data) => {
     // Validate for array
     if (!data instanceof Array) {
         return Error('Data should be array');

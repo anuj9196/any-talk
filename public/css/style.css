@@ -73,7 +73,7 @@ body, html {
     top: 50%;
     left: 0;
     transform: translate(-6rem, -50%);
-    width: 24rem;
+    width: 20rem;
     height: 32rem;
     padding: 1rem 2rem 1rem 1rem;
     box-sizing: border-box;
@@ -99,7 +99,7 @@ body, html {
     margin: 0;
 }
 .contacts:hover {
-    transform: translate(-23rem, -50%);
+    transform: translate(-19rem, -50%);
 }
 
 /** room **/
@@ -107,9 +107,8 @@ body, html {
     position: absolute;
     top: 50%;
     left: 0;
-    transform: translate(6rem, -50%);
-    /*transform: translate(23rem, -50%);*/
-    width: 24rem;
+    transform: translate(10rem, -50%);
+    width: 20rem;
     height: 32rem;
     padding: 1rem 1rem 1rem 2rem;
     box-sizing: border-box;
@@ -366,6 +365,12 @@ body, html {
 .d-none {
     display: none;
 }
+.d-inline {
+    display: inline;
+}
 h4.dead-text {
     color: gray;
+}
+.fas {
+    color: #999;
 }
