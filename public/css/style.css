@@ -363,3 +363,9 @@ body, html {
 .badge.offline {
     background: #d60000;
 }
+.d-none {
+    display: none;
+}
+h4.dead-text {
+    color: gray;
+}

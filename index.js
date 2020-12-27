@@ -130,11 +130,26 @@ io.on('connection', (socket) => {
         users[socket.id] = user;
 
         // Return joined
-        console.log('user joined chat: ', user.username);
+        console.log('user joined chat: ', user.nickname);
         functions.chatJoined(io, socket, user);
         functions.updateContact(io, socket, users);
         socket.user = user;
         return true;
+    });
+
+    // Create room
+    socket.on('create room', (data) => {
+
+    });
+
+    // Delete room
+    socket.on('delete room', (data) => {
+
+    });
+
+    // Join a room
+    socket.on('join room', (data) => {
+
     });
 
     socket.on('logout', () => {

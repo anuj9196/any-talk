@@ -14,6 +14,12 @@ const messageList = $('#message-list');
 const contactsList = $('#contacts-list');
 const logoutBtn = $('#logout');
 const chatUser = $('#chat-user');
+const newRoomBtn = $('.new-room-btn');
+const roomAddForm = $('#room-add-form');
+const roomsList = $('#rooms-list');
+const noRoom = $('#no-room');
+const roomsItem = $('#rooms-item');
+const noContact = $('#no-contact');
 
 blockChatUser.hide();
 
@@ -49,6 +55,12 @@ function joinChat() {
 
 $(function () {
 
+    // Hide room list
+    roomsItem.hide();
+    noRoom.show();
+    contactsList.hide();
+    noContact.show();
+
     // deleteKey();
     const socket = io();
 
@@ -74,22 +86,48 @@ $(function () {
         const users = Object.values(data);
         console.log('users: ', users);
 
-        contactsList.html('');
-        console.log('kkk: ', getKey());
-        for (let i=0; i< users.length; i++) {
-            if (users[i].nickname !== getKey()) {
-                contactsList.append(
-                    '<div class="contact">' +
-                    '<div class="pic"><img alt="" src="' + users[i].avatar + '"></div>' +
-                    `<div class="badge ${users[i].online ? 'online' : 'offline'}"></div>` +
-                    `<div class="name">${users[i].display_name}</div>` +
-                    '<div class="message">' +
-                    '' +
-                    '</div>' +
-                    '</div>'
-                );
+        if (users.length > 1) {
+            noContact.hide();
+            contactsList.show();
+
+            contactsList.html('');
+            console.log('kkk: ', getKey());
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].nickname !== getKey()) {
+                    contactsList.append(
+                        '<div class="contact">' +
+                        '<div class="pic"><img alt="" src="' + users[i].avatar + '"></div>' +
+                        `<div class="badge ${users[i].online ? 'online' : 'offline'}"></div>` +
+                        `<div class="name">${users[i].display_name}</div>` +
+                        '<div class="message">' +
+                        '' +
+                        '</div>' +
+                        '</div>'
+                    );
+                }
             }
+        } else {
+            contactsList.hide();
+            noContact.show();
         }
+    });
+
+    socket.on('rooms update', (data) => {
+        console.log('rooms received: ', data);
+
+        // // Clear content
+        // roomsItem.html('');
+        // // Add room
+        // roomsItem.append(
+        //     '<div class="contact">' +
+        //     '<div class="pic"><img alt="" src="' + users[i].avatar + '"></div>' +
+        //     `<div class="badge ${users[i].online ? 'online' : 'offline'}"></div>` +
+        //     `<div class="name">${users[i].display_name}</div>` +
+        //     '<div class="message">' +
+        //     '' +
+        //     '</div>' +
+        //     '</div>'
+        // );
     });
 
     socket.on('user offline', (data) => {
@@ -139,6 +177,11 @@ $(function () {
     logoutBtn.click((e) => {
        socket.emit('logout');
     });
+
+    newRoomBtn.click(() => {
+        roomAddForm.toggle();
+        roomsList.toggle();
+    })
 
     // $('#btn-add-contact').click(() => {
     //     console.log('clicked: ');

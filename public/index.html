@@ -11,10 +11,10 @@
 
     <div class="chat-user text-center">
         <h2>
-            <span class="badge online"></span>
+            <span class="badge online" title="Online"></span>
             Hello!
             <span id="chat-user"></span>
-            <i id="logout" class="logout fas fa-power-off"></i>
+            <i id="logout" class="logout fas fa-power-off" title="Logout"></i>
         </h2>
     </div>
 
@@ -39,15 +39,15 @@
     </div>
 
     <div class="contacts" id="contacts">
-<!--        <i class="action-icon fas fa-bars fa-2x"></i>-->
+        <h2>Contacts</h2>
 
-        <h2>
-            Contacts
-        </h2>
-
-        <div id="contacts-list">
+        <div id="no-contact" class="d-none text-center">
+            <h4 class="dead-text">No user has joined yet!</h4>
         </div>
+
+        <div id="contacts-list"></div>
     </div>
+
     <div class="chat" id="chat">
         <div class="contact bar">
             <div class="pic stark"></div>
@@ -90,76 +90,44 @@
             <i class="fas fa-paper-plane" id="btn-send"></i>
         </div>
     </div>
+
     <div class="rooms" id="rooms">
-        <i class="action-icon fas fa-bars fa-2x"></i>
-        <h2 class="">
-            Rooms
-        </h2>
-        <div class="contact">
-            <div class="pic">
-                <img alt="" src="https://i.pravatar.cc/100">
-            </div>
-            <div class="badge">
-                14
-            </div>
-            <div class="name">
-                Steve Rogers
-            </div>
-            <div class="message">
-                That is America's ass 🇺🇸🍑
-            </div>
+        <i class="action-icon new-room-btn fas fa-plus-circle fa-2x" title="New room"></i>
+        <h2 class="">Rooms</h2>
+
+        <div id="room-add-form" class="contact-add-form d-none">
+            <form class="form">
+                <div class="input">
+                    <input placeholder="Room name" type="text" title="Room name"/>
+                </div>
+                <br>
+                <button class="btn-join p-center" type="submit">Create</button>
+            </form>
         </div>
-        <div class="contact">
-            <div class="pic">
-                <img alt="" src="https://i.pravatar.cc/100">
+
+        <div id="rooms-list">
+
+            <div id="no-room" class="d-none text-center">
+                <h4 class="dead-text">No rooms to join</h4>
+                <br>
+                <button class="btn-join new-room-btn" type="button" title="Create new room">New Room</button>
             </div>
-            <div class="name">
-                Tony Stark
-            </div>
-            <div class="message">
-                Uh, he's from space, he came here to steal a necklace from a wizard.
-            </div>
-        </div>
-        <div class="contact">
-            <div class="pic">
-                <img alt="" src="https://i.pravatar.cc/100">
-            </div>
-            <div class="badge">
-                1
-            </div>
-            <div class="name">
-                Bruce Banner
-            </div>
-            <div class="message">
-                There's an Ant-Man *and* a Spider-Man?
-            </div>
-        </div>
-        <div class="contact">
-            <div class="pic">
-                <img alt="" src="https://i.pravatar.cc/100">
-            </div>
-            <div class="name">
-                Thor Odinson
-            </div>
-            <div class="badge">
-                3
-            </div>
-            <div class="message">
-                I like this one
-            </div>
-        </div>
-        <div class="contact">
-            <div class="pic">
-                <img alt="" src="https://i.pravatar.cc/100">
-            </div>
-            <div class="badge">
-                2
-            </div>
-            <div class="name">
-                Carol Danvers
-            </div>
-            <div class="message">
-                Hey Peter Parker, you got something for me?
+
+            <div id="rooms-item">
+                <div class="contact">
+                    <div class="pic">
+                        <img alt="" src="https://i.pravatar.cc/100">
+                    </div>
+                    <div class="badge">
+                        14
+                    </div>
+                    <div class="name">
+                        Steve Rogers
+                    </div>
+                    <div class="message">
+                        That is America's ass 🇺🇸🍑
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -24,6 +24,9 @@ exports.roomRules = {
             minimum: 1,
             maximum: 10
         }
+    },
+    creator: {
+        presence: false
     }
 };
 
