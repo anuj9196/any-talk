@@ -11,7 +11,7 @@ body, html {
 .center {
     position: absolute;
     top: 50%;
-    left: calc(50% + 12rem);
+    left: calc(50%);
     transform: translate(-50%, -50%);
 }
 
@@ -34,7 +34,14 @@ body, html {
 }
 .contact .pic {
     position: absolute;
+}
+.contacts .contact .pic {
     left: 0;
+}
+.contact .pic img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
 }
 .contact .name {
     font-weight: 500;
@@ -54,9 +61,11 @@ body, html {
     padding-top: 0.125rem;
     border-radius: 1rem;
     top: 0;
-    left: 2.5rem;
     background: #333;
     color: white;
+}
+.contacts .contact .badge {
+    left: 2.5rem;
 }
 
 .contacts {
@@ -77,13 +86,13 @@ body, html {
 .contacts h2 {
     margin: 0.5rem 0 1.5rem 5rem;
 }
-.contacts .fa-bars, .contacts .fa-plus-circle {
+.contacts .action-icon {
     position: absolute;
     left: 2.25rem;
     color: #999;
     transition: color 200ms;
 }
-.contacts .fa-bars:hover, .contacts .fa-plus-circle:hover {
+.contacts .action-icon:hover {
     color: #666;
 }
 .contacts .contact:last-child {
@@ -99,11 +108,12 @@ body, html {
     top: 50%;
     left: 0;
     transform: translate(6rem, -50%);
+    /*transform: translate(23rem, -50%);*/
     width: 24rem;
     height: 32rem;
-    padding: 1rem 2rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 2rem;
     box-sizing: border-box;
-    border-radius: 1rem 0 0 1rem;
+    border-radius: 0 1rem 1rem 0;
     cursor: pointer;
     background: white;
     box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1), 2rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
@@ -111,6 +121,33 @@ body, html {
 }
 .rooms:hover {
     transform: translate(23rem, -50%);
+}
+.rooms .contact {
+    padding-right: 5rem;
+}
+.rooms .contact .pic {
+    right: 0;
+}
+.rooms .contact .badge {
+    right: 2.5rem;
+}
+.rooms .contact .name {
+    text-align: right;
+}
+.rooms .contact .message {
+    text-align: right;
+}
+.rooms .action-icon {
+    position: absolute;
+    right: 2.25rem;
+    color: #999;
+    transition: color 200ms;
+}
+.rooms .action-icon:hover {
+    color: #666;
+}
+.rooms h2 {
+    margin: 0.5rem 0 1.5rem 5rem;
 }
 /** end room **/
 
@@ -125,7 +162,7 @@ body, html {
     box-sizing: border-box;
     border-radius: 1rem;
     background: white;
-    box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1), 0rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1), 0 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
 }
 .chat .contact.bar {
     flex-basis: 3.5rem;
@@ -146,7 +183,6 @@ body, html {
     padding: 0.25rem 1rem;
     border-radius: 2rem;
     color: #999;
-    width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
     margin: 0 auto;
@@ -158,11 +194,10 @@ body, html {
     background: #FFF;
     border-radius: 1.125rem 1.125rem 1.125rem 0;
     min-height: 2.25rem;
-    width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
     max-width: 66%;
-    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075), 0 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
 }
 .chat .messages .message.parker {
     margin: 1rem 1rem 1rem auto;
@@ -174,7 +209,7 @@ body, html {
     display: inline-block;
     width: 0.8rem;
     height: 0.8rem;
-    margin-right: 0rem;
+    margin-right: 0;
     box-sizing: border-box;
     background: #ccc;
     border-radius: 50%;
@@ -217,7 +252,7 @@ body, html {
     margin-right: 1rem;
     border-radius: 1.125rem;
     flex-grow: 2;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 1rem 1rem -1rem rgba(0, 0, 0, 0.2);
     font-family: Red hat Display, sans-serif;
     font-weight: 400;
     letter-spacing: 0.025em;
@@ -247,25 +282,6 @@ body, html {
         opacity: 1;
     }
 }
-.pic.stark {
-    background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/73/SMH_Mentor_6.png");
-}
-
-.pic.banner {
-    background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/4/4f/BruceHulk-Endgame-TravelingCapInPast.jpg");
-}
-
-.pic.thor {
-    background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/9/98/ThorFliesThroughTheAnus.jpg");
-}
-
-.pic.danvers {
-    background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/0/05/HeyPeterParker.png");
-}
-
-.pic.rogers {
-    background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/7c/Cap.America_%28We_Don%27t_Trade_Lives_Vision%29.png");
-}
 
 .contact-add-form {
     display: none;
@@ -288,4 +304,62 @@ body, html {
 .p-center {
     left: 34%;
     position: relative;
+}
+
+/* Join form */
+.join-chat {
+    top: 50%;
+    left: 0;
+    width: 24rem;
+    padding: 1rem 2rem 1rem 1rem;
+    box-sizing: border-box;
+    border-radius: 1rem 0 0 1rem;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1), 2rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
+}
+.join-chat h2 {
+    margin: 0.5rem 0 1.5rem 0;
+}
+.join-chat .fa-bars, .join-chat .fa-plus-circle {
+    position: absolute;
+    left: 2.25rem;
+    color: #999;
+    transition: color 200ms;
+}
+.join-chat .fa-bars:hover, .join-chat .fa-plus-circle:hover {
+    color: #666;
+}
+.join-chat .contact:last-child {
+    margin: 0;
+}
+.error {
+    color: red;
+}
+.join-form .input {
+    display: block;
+    width: 100%;
+}
+.join-form .input input {
+    width: 100%;
+}
+.logout {
+    cursor: pointer;
+    color: #d2d2d2;
+}
+.logout:hover {
+    color: #9e4444;
+}
+.badge {
+    width: 1rem;
+    height: 1rem;
+    background: red;
+    display: inline-block;
+    border-radius: 50%;
+}
+.badge.online {
+    background: #00bf00;
+}
+.badge.offline {
+    background: #d60000;
 }
