@@ -13,6 +13,17 @@ const rooms = [];
 const users = [];
 const usersInRooms = [];
 
+/**
+ * {
+ *     from: <nickname>,
+ *     to: <nickname>,
+ *     room: <room-name>,
+ *     message: <message>,
+ *     sent: <date>
+ * }
+ */
+const messageList = [];
+
 app.use(express.static( 'public'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
@@ -20,6 +31,7 @@ app.get('/', (req, res) => {
 
 function joinRoom(io, socket, room) {
     socket.join(room.name);
+    socket.room = room.name;
     socket.emit('room joined', room);
 
     console.log('users in room: ', usersInRooms);
@@ -31,6 +43,15 @@ function joinRoom(io, socket, room) {
     console.log('new list u: ', roomUsers);
     // socket.emit('contact update', roomUsers);
     functions.updateContact(io, socket, roomUsers, room);
+}
+
+function getMessages(io, socket) {
+    return messageList.filter(m => {
+        return (
+            (m.from === socket.user.nickname && m.to === socket.chat) ||
+            (m.from === socket.chat && m.to === socket.user.nickname)
+        ) && m.room === socket.room;
+    });
 }
 
 io.on('connection', (socket) => {
@@ -57,6 +78,32 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         console.log('message received: ', msg);
         io.emit('chat message', msg);
+    });
+
+    socket.on('chat', (nickname) => {
+        console.log('starting chat with: ', nickname);
+
+        socket.chat = nickname;
+        const messages = getMessages(io, socket);
+
+        socket.emit('chat update', messages);
+    });
+
+    socket.on('send message', (data) => {
+        console.log('message received: ', data);
+        console.log('from: ', socket.user.nickname);
+        console.log('to: ', socket.chat);
+        console.log('in room: ', socket.room);
+        console.log('sent: ', new Date());
+        messageList.push({
+            from: socket.user.nickname,
+            to: socket.chat,
+            room: socket.room,
+            sent: new Date(),
+            message: data.message
+        });
+
+        socket.emit('chat update', getMessages(io, socket));
     });
 
     // Validate user

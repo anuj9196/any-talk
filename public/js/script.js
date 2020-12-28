@@ -22,6 +22,9 @@ const roomsItem = $('#rooms-item');
 const noContact = $('#no-contact');
 const chatUserAvatar = $('#chat-user-avatar');
 
+const btnSend = $('#btn-send');
+const inputMessage = $('#input-message');
+
 blockChatUser.hide();
 
 function setKey(k) {
@@ -102,7 +105,7 @@ $(function () {
                         '<div class="contact" data-nickname="' + users[i].nickname + '">' +
                         '<div class="pic"><img alt="" src="' + users[i].avatar + '"></div>' +
                         `<div class="badge ${users[i].online ? 'online' : 'offline'}"></div>` +
-                        `<div class="name">${users[i].display_name}</div>` +
+                        '<div class="name" data-nickname="'+ users[i].nickname +'">' + users[i].display_name +'</div>' +
                         '<div class="message">' +
                         '' +
                         '</div>' +
@@ -142,6 +145,10 @@ $(function () {
         console.error('Error joining room: ', data);
     });
 
+    socket.on('chat update', (messages) => {
+        console.log('messages received: ', messages);
+    });
+
     socket.on('room joined', (data) => {
         console.log('You joined the room: ', data);
         $('body').find('.room').removeClass('selected');
@@ -163,6 +170,11 @@ $(function () {
     $('body').on('click', '.contact', (e) => {
        console.log('contact clicked: ', e);
        console.log('this: ', $(this));
+       const nickname = $(e.target).data('nickname');
+       if (nickname) {
+           socket.emit('chat', nickname);
+       }
+       console.log('nickname: ', nickname);
     });
 
     socket.on('user offline', (data) => {
@@ -220,6 +232,19 @@ $(function () {
 
     socket.on('room create error', (data) => {
         console.log('room create error: ', data);
+    });
+
+    btnSend.click(() => {
+        console.log('send button clicked..');
+        const message = inputMessage.val();
+        console.log('message is: ', message);
+        if (!message) {
+            return alert('Please enter message');
+        }
+
+        socket.emit('send message', {
+            message: message
+        });
     });
 
     $('#room-join-submit').click((e) => {
