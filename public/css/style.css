@@ -23,7 +23,7 @@ body, html {
     border-radius: 50%;
 }
 
-.contact {
+.contact, .room {
     position: relative;
     margin-bottom: 1rem;
     padding-left: 5rem;
@@ -32,26 +32,29 @@ body, html {
     flex-direction: column;
     justify-content: center;
 }
-.contact .pic {
+.contact .pic, .room .pic {
     position: absolute;
 }
 .contacts .contact .pic {
     left: 0;
 }
-.contact .pic img {
+.rooms .room .pic {
+    right: 0;
+}
+.contact .pic img, .room .pic img {
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
 }
-.contact .name {
+.contact .name, .room .name {
     font-weight: 500;
     margin-bottom: 0.125rem;
 }
-.contact .message, .contact .seen {
+.contact .message, .contact .seen, .room .message {
     font-size: 0.9rem;
     color: #999;
 }
-.contact .badge {
+.contact .badge, .room .badge {
     box-sizing: border-box;
     position: absolute;
     width: 1.5rem;
@@ -67,7 +70,9 @@ body, html {
 .contacts .contact .badge {
     left: 2.5rem;
 }
-
+.rooms .room .badge {
+    left: 2.5rem;
+}
 .contacts {
     position: absolute;
     top: 50%;
@@ -121,19 +126,19 @@ body, html {
 .rooms:hover {
     transform: translate(23rem, -50%);
 }
-.rooms .contact {
+.rooms .room {
     padding-right: 5rem;
 }
-.rooms .contact .pic {
+.rooms .room .pic {
     right: 0;
 }
-.rooms .contact .badge {
+.rooms .room .badge {
     right: 2.5rem;
 }
-.rooms .contact .name {
+.rooms .room .name {
     text-align: right;
 }
-.rooms .contact .message {
+.rooms .room .message {
     text-align: right;
 }
 .rooms .action-icon {

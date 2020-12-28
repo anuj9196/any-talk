@@ -96,11 +96,10 @@ $(function () {
             contactsList.show();
 
             contactsList.html('');
-            console.log('kkk: ', getKey());
             for (let i = 0; i < users.length; i++) {
                 if (users[i].nickname !== getKey()) {
                     contactsList.append(
-                        '<div class="contact">' +
+                        '<div class="contact" data-nickname="' + users[i].nickname + '">' +
                         '<div class="pic"><img alt="" src="' + users[i].avatar + '"></div>' +
                         `<div class="badge ${users[i].online ? 'online' : 'offline'}"></div>` +
                         `<div class="name">${users[i].display_name}</div>` +
@@ -129,7 +128,7 @@ $(function () {
 
             for (let i = 0; i < data.length; i++) {
                 roomsItem.append(
-                    `<div class="contact room ${data[i].name}">` +
+                    `<div class="room ${data[i].name}">` +
                     '<div class="pic"><img alt="" src="/icons/room_' + data[i].icon + '.svg"> </div>' +
                     `<div class="name">${data[i].name}</div>` +
                     '<div class="message"></div>' +
@@ -159,6 +158,11 @@ $(function () {
         } else {
             console.error('Room name is empty');
         }
+    });
+
+    $('body').on('click', '.contact', (e) => {
+       console.log('contact clicked: ', e);
+       console.log('this: ', $(this));
     });
 
     socket.on('user offline', (data) => {
