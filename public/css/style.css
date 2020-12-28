@@ -374,3 +374,11 @@ h4.dead-text {
 .fas {
     color: #999;
 }
+.room.selected {
+    background: #ececec;
+}
+.chat-user-avatar {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+}

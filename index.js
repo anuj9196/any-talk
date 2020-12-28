@@ -10,7 +10,7 @@ const functions = require('./functions');
 const PORT = process.env.PORT || 3000;
 
 const rooms = [];
-const users = {};
+const users = [];
 const usersInRooms = [];
 
 app.use(express.static( 'public'));
@@ -18,18 +18,39 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+function joinRoom(io, socket, room) {
+    socket.join(room.name);
+    socket.emit('room joined', room);
+
+    console.log('users in room: ', usersInRooms);
+    const usersList = usersInRooms.filter(_ => {return _.room_name === room.name}).map(_ => _.user_nickname);
+    const roomUsers = users.filter(_ => {
+        return usersList.includes(_.nickname);
+    });
+
+    console.log('new list u: ', roomUsers);
+    // socket.emit('contact update', roomUsers);
+    functions.updateContact(io, socket, roomUsers, room);
+}
+
 io.on('connection', (socket) => {
     console.log('a user connected: ', socket.id);
 
     // socket.broadcast.emit('hi');
     socket.on('disconnect', () => {
         console.log('user disconnected');
-        if (users.hasOwnProperty(socket.id)) {
-            users[socket.id]['online'] = false;
+        const u = users.filter(_ => {
+            return _.id === socket.id;
+        });
+        if (u.length) {
+            u[0]['online'] = false;
             socket.broadcast.emit('user offline', socket.user);
             functions.updateContact(io, socket, users);
-            // io.emit('contact update', users);
         }
+        // if (users.hasOwnProperty(socket.id)) {
+        //
+        //     // io.emit('contact update', users);
+        // }
     });
 
     // On messaging
@@ -44,22 +65,21 @@ io.on('connection', (socket) => {
         //     return u.nickname === data;
         // });
 
-        const fI = Object.values(users).findIndex(u => {
-            return u.nickname === data;
+        // const fI = Object.values(users).findIndex(u => {
+        //     return u.nickname === data;
+        // });
+
+        const uI = users.findIndex(_ => {
+            return _.nickname === data;
         });
 
-        if (fI > -1) {
-            // find index of key and assign new index
-            const fK = Object.keys(users)[fI];
-            const user = users[fK];
+        if (uI > -1) {
+            const user = users[uI];
             Object.assign(user, {
                 id: socket.id,
                 online: true
             });
-            users[socket.id] = user;
-
-            // delete old user index
-            delete users[fK];
+            users[uI] = user;
 
             socket.user = user;
             functions.chatJoined(io, socket, user);
@@ -68,6 +88,27 @@ io.on('connection', (socket) => {
         } else {
             io.emit('invalid user');
         }
+
+        // if (fI > -1) {
+        //     // find index of key and assign new index
+        //     const fK = Object.keys(users)[fI];
+        //     const user = users[fK];
+        //     Object.assign(user, {
+        //         id: socket.id,
+        //         online: true
+        //     });
+        //     users[socket.id] = user;
+        //
+        //     // delete old user index
+        //     delete users[fK];
+        //
+        //     socket.user = user;
+        //     functions.chatJoined(io, socket, user);
+        //     functions.updateContact(io, socket, users);
+        //     io.emit('rooms update', rooms);
+        // } else {
+        //     io.emit('invalid user');
+        // }
 
         // if (fU.length > 0) {
         //     socket.emit('chat joined', Object.assign(fU[0], {
@@ -128,7 +169,8 @@ io.on('connection', (socket) => {
             online: true,
             id: socket.id
         });
-        users[socket.id] = user;
+        users.push(user);
+        // users[socket.id] = user;
 
         // Return joined
         console.log('user joined chat: ', user.nickname);
@@ -180,8 +222,7 @@ io.on('connection', (socket) => {
         io.emit('rooms update', rooms);
 
         // Join the room
-        socket.join(roomData.name);
-        socket.emit('room joined', roomData);
+        joinRoom(io, socket, roomData);
     });
 
     // Delete room
@@ -216,15 +257,20 @@ io.on('connection', (socket) => {
             });
 
             // Join the room
-            socket.join(data);
-            socket.emit('room joined', data);
+            joinRoom(io, socket, rooms[roomIndex]);
         }
     });
 
     socket.on('logout', () => {
         console.log('list of user: ', users);
         console.log('user requested for logout: ', socket.user);
-        delete users[socket.id];
+        const uI = users.findIndex(_ => {
+            return _.id === socket.id;
+        });
+        if (uI > -1) {
+            users.splice(uI, 1);
+        }
+        // delete users[socket.id];
         io.to(socket.id).emit('logout success');
         functions.updateContact(io, socket, users);
         // io.emit('contact update', users);

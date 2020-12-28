@@ -20,6 +20,7 @@ const roomsList = $('#rooms-list');
 const noRoom = $('#no-room');
 const roomsItem = $('#rooms-item');
 const noContact = $('#no-contact');
+const chatUserAvatar = $('#chat-user-avatar');
 
 blockChatUser.hide();
 
@@ -39,8 +40,11 @@ function setUser(user) {
     if (!user) {
         chatUser.text('');
         blockChatUser.hide();
+        chatUserAvatar.hide();
     } else {
         chatUser.text(user.display_name);
+        chatUserAvatar.attr('src', user.avatar);
+        chatUserAvatar.show();
         blockChatUser.show();
     }
 }
@@ -83,7 +87,8 @@ $(function () {
     });
 
     socket.on('contact update', (data) => {
-        const users = Object.values(data);
+        // const users = Object.values(data);
+        const users = data;
         console.log('users: ', users);
 
         if (users.length > 1) {
@@ -140,8 +145,10 @@ $(function () {
 
     socket.on('room joined', (data) => {
         console.log('You joined the room: ', data);
-        $('.room').removeClass('selected');
-        $(`.room ${data.name}`).addClass('selected');
+        $('body').find('.room').removeClass('selected');
+        $('body').find('.room.' + data.name).addClass('selected');
+        // $('.room').removeClass('selected');
+        // $(`.room.${data.name}`).addClass('selected');
     });
 
     $(document).on('click', '.room', (e) => {
