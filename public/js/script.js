@@ -147,6 +147,18 @@ $(function () {
 
     socket.on('chat update', (messages) => {
         console.log('messages received: ', messages);
+        for (let i = 0; i < messages.length; i++) {
+            messageList.append(
+                '<div class="message">' +
+                messages[i].from !== getKey() ? '<div class="from">' + messages[i].from + '</div>' : '' +
+                '<div class="text">'+ messages[i].message +'</div>' +
+                '</div>'
+            )
+        }
+    });
+
+    socket.on('send message error', (data) => {
+        console.error('send message error: ', data);
     });
 
     socket.on('room joined', (data) => {

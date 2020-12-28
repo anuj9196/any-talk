@@ -31,27 +31,52 @@ app.get('/', (req, res) => {
 
 function joinRoom(io, socket, room) {
     socket.join(room.name);
-    socket.room = room.name;
+    socket.room = room;
     socket.emit('room joined', room);
 
     console.log('users in room: ', usersInRooms);
-    const usersList = usersInRooms.filter(_ => {return _.room_name === room.name}).map(_ => _.user_nickname);
-    const roomUsers = users.filter(_ => {
-        return usersList.includes(_.nickname);
-    });
+    updateContacts(io, socket);
+    // const usersList = usersInRooms.filter(_ => {return _.room_name === room.name}).map(_ => _.user_nickname);
+    // const roomUsers = users.filter(_ => {
+    //     return usersList.includes(_.nickname);
+    // });
+    //
+    // console.log('new list u: ', roomUsers);
+    // // socket.emit('contact update', roomUsers);
+    // functions.updateContact(io, socket, roomUsers, room);
+}
 
-    console.log('new list u: ', roomUsers);
-    // socket.emit('contact update', roomUsers);
-    functions.updateContact(io, socket, roomUsers, room);
+function updateContacts(io, socket) {
+    const room = socket.room;
+    console.log('updating contacts in room: ', room);
+    if (room) {
+        const usersList = usersInRooms.filter(_ => {
+            return _.room_name === room.name
+        }).map(_ => _.user_nickname);
+        const roomUsers = users.filter(_ => {
+            return usersList.includes(_.nickname);
+        });
+
+        console.log('new list u: ', roomUsers);
+        // socket.emit('contact update', roomUsers);
+        functions.updateContact(io, socket, roomUsers, room);
+    }
 }
 
 function getMessages(io, socket) {
-    return messageList.filter(m => {
-        return (
-            (m.from === socket.user.nickname && m.to === socket.chat) ||
-            (m.from === socket.chat && m.to === socket.user.nickname)
-        ) && m.room === socket.room;
+    console.log('message list: ', messageList);
+    console.log('socket user: ', socket.user);
+    console.log('room: ', socket.room);
+    console.log('chat: ', socket.chat);
+    const mF = messageList.filter(m => {
+        // return (
+        //     (m.from === socket.user.nickname && m.to === socket.chat) ||
+        //     (m.from === socket.chat && m.to === socket.user.nickname)
+        // ) && m.room === socket.room.name;
+        return m.room === socket.room.name;
     });
+    console.log('new msg list: ', mF);
+    return mF;
 }
 
 io.on('connection', (socket) => {
@@ -66,7 +91,8 @@ io.on('connection', (socket) => {
         if (u.length) {
             u[0]['online'] = false;
             socket.broadcast.emit('user offline', socket.user);
-            functions.updateContact(io, socket, users);
+            // functions.updateContact(io, socket, users);
+            updateContacts(io, socket);
         }
         // if (users.hasOwnProperty(socket.id)) {
         //
@@ -92,18 +118,23 @@ io.on('connection', (socket) => {
     socket.on('send message', (data) => {
         console.log('message received: ', data);
         console.log('from: ', socket.user.nickname);
-        console.log('to: ', socket.chat);
+        // console.log('to: ', socket.chat);
         console.log('in room: ', socket.room);
         console.log('sent: ', new Date());
-        messageList.push({
-            from: socket.user.nickname,
-            to: socket.chat,
-            room: socket.room,
-            sent: new Date(),
-            message: data.message
-        });
+        if (socket.room) {
+            messageList.push({
+                from: socket.user.nickname,
+                // to: socket.chat,
+                room: socket.room.name,
+                sent: new Date(),
+                message: data.message
+            });
+            io.to(socket.room.name).emit('chat update', getMessages(io, socket));
+        } else {
+            socket.emit('send message error', 'Please join/create a room first');
+        }
 
-        socket.emit('chat update', getMessages(io, socket));
+
     });
 
     // Validate user
@@ -130,7 +161,9 @@ io.on('connection', (socket) => {
 
             socket.user = user;
             functions.chatJoined(io, socket, user);
-            functions.updateContact(io, socket, users);
+            // Ask to join room first
+            // updateContacts(io, socket);
+            // functions.updateContact(io, socket, users);
             io.emit('rooms update', rooms);
         } else {
             io.emit('invalid user');
@@ -222,7 +255,8 @@ io.on('connection', (socket) => {
         // Return joined
         console.log('user joined chat: ', user.nickname);
         functions.chatJoined(io, socket, user);
-        functions.updateContact(io, socket, users);
+        // updateContacts(io, socket);
+        // functions.updateContact(io, socket, users);
         socket.user = user;
         io.emit('rooms update', rooms);
         return true;
@@ -247,7 +281,7 @@ io.on('connection', (socket) => {
             return false;
         }
 
-        // Validate of user already exists
+        // Validate if room already exists
         const uE = Object.values(rooms).filter(u => {
             return u.name === roomData.name;
         });
@@ -267,6 +301,12 @@ io.on('connection', (socket) => {
         // Push to rooms
         rooms.push(roomData);
         io.emit('rooms update', rooms);
+
+        // join room
+        usersInRooms.push({
+            user_nickname: socket.user.nickname,
+            room_name: roomData.name
+        });
 
         // Join the room
         joinRoom(io, socket, roomData);
@@ -292,10 +332,11 @@ io.on('connection', (socket) => {
 
         // Check if user user is not in the room
         const uRIndex = usersInRooms.findIndex(uR => {
-            return uR.nickname === socket.user.nickname && uR.name === data;
+            return uR.user_nickname === socket.user.nickname && uR.room_name === data;
         })
         if (uRIndex > -1) {
             // User already in the room
+            joinRoom(io, socket, rooms[roomIndex]);
         } else {
             // Join the room
             usersInRooms.push({
