@@ -5,14 +5,14 @@ exports.userRules = {
         presence: true,
         length: {
             minimum: 1,
-            maximum: 10
+            maximum: 25
         }
     },
     display_name: {
         presence: false,
         length: {
             minimum: 1,
-            maximum: 10
+            maximum: 25
         }
     },
     color: {
@@ -25,7 +25,7 @@ exports.roomRules = {
         presence: true,
         length: {
             minimum: 1,
-            maximum: 10
+            maximum: 25
         }
     },
     creator: {
