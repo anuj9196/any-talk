@@ -179,9 +179,9 @@ io.on('connection', (socket) => {
             // Ask to join room first
             // updateContacts(io, socket);
             // functions.updateContact(io, socket, users);
-            io.emit('rooms update', rooms);
+            socket.emit('rooms update', rooms);
         } else {
-            io.emit('invalid user');
+            socket.emit('invalid user');
         }
 
         // if (fI > -1) {
@@ -287,6 +287,10 @@ io.on('connection', (socket) => {
     socket.on('create room', (data) => {
         const roomData = utils.serializeForm(data);
         console.log('creating room: ', data);
+        if (!socket.user) {
+            console.log('Invalid user: ', socket.user);
+            socket.emit('invalid user');
+        }
 
         // In case of validation error
         if (roomData instanceof Error) {
