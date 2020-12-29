@@ -122,14 +122,14 @@ io.on('connection', (socket) => {
         io.emit('chat message', msg);
     });
 
-    socket.on('chat', (nickname) => {
-        console.log('starting chat with: ', nickname);
-
-        socket.chat = nickname;
-        const messages = getMessages(io, socket);
-
-        socket.emit('chat update', messages);
-    });
+    // socket.on('chat', (nickname) => {
+    //     console.log('starting chat with: ', nickname);
+    //
+    //     socket.chat = nickname;
+    //     const messages = getMessages(io, socket);
+    //
+    //     socket.emit('chat update', messages);
+    // });
 
     socket.on('send message', (data) => {
         console.log('message received: ', data);

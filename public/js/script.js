@@ -21,13 +21,14 @@ const noRoom = $('#no-room');
 const roomsItem = $('#rooms-item');
 const noContact = $('#no-contact');
 const chatUserAvatar = $('#chat-user-avatar');
+const chatUserBadge = $('#chat-user-badge');
 const typingBlock = $('#typing');
 
 const btnSend = $('#btn-send');
 const inputMessage = $('#input-message');
 const body = $('body');
 
-blockChatUser.hide();
+// blockChatUser.hide();
 
 function setKey(k) {
     localStorage.setItem(localKey, k);
@@ -49,6 +50,7 @@ function setUser(user) {
     } else {
         chatUser.text(user.display_name);
         chatUserAvatar.attr('src', user.avatar);
+        chatUserBadge.css('background', user.color ? user.color : '#00bf00');
         chatUserAvatar.show();
         blockChatUser.show();
     }
@@ -244,9 +246,9 @@ $(function () {
        console.log('contact clicked: ', e);
        console.log('this: ', $(this));
        const nickname = $(e.target).data('nickname');
-       if (nickname) {
-           socket.emit('chat', nickname);
-       }
+       // if (nickname) {
+       //     socket.emit('chat', nickname);
+       // }
        console.log('nickname: ', nickname);
     });
 

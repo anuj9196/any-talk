@@ -9,17 +9,7 @@
 <body>
 <div class="center">
 
-    <div class="chat-user text-center">
-        <h2>
-            <span class="badge online" title="Online"></span>
-            <img id="chat-user-avatar" class="chat-user-avatar" alt="" src="">
-            Hello!
-            <span id="chat-user"></span>
-            <i id="logout" class="logout fas fa-power-off" title="Logout"></i>
-        </h2>
-    </div>
-
-    <div class="join-chat" id="join-chat">
+    <div class="join-chat d-none" id="join-chat">
         <h2 class="text-center">
             Join Chat
         </h2>
@@ -39,7 +29,17 @@
         </div>
     </div>
 
-    <div class="contacts" id="contacts">
+    <div class="chat-user text-center d-none" id="chat-user-block">
+        <h2>
+            <span class="badge online" title="Online" id="chat-user-badge"></span>
+            <img id="chat-user-avatar" class="chat-user-avatar" alt="" src="">
+            Hello!
+            <span id="chat-user"></span>
+            <i id="logout" class="logout fas fa-power-off" title="Logout"></i>
+        </h2>
+    </div>
+
+    <div class="contacts d-none" id="contacts">
         <i class="fas fa-user-friends fa-2x"></i>
         <h2 class="d-inline">Contacts</h2>
 
@@ -50,55 +50,40 @@
         <div id="contacts-list"></div>
     </div>
 
-    <div class="chat" id="chat">
-        <div class="top-bar text-center">
-            <div class="name">Messages</div>
-<!--            <div class="seen">-->
-<!--                Today at 12:56-->
-<!--            </div>-->
-        </div>
-        <div class="messages" id="messages">
-            <div id="message-list">
-
+    <div id="chat" class="d-none">
+        <div class="chat">
+            <div class="top-bar text-center">
+                <div class="name">Messages</div>
+    <!--            <div class="seen">-->
+    <!--                Today at 12:56-->
+    <!--            </div>-->
             </div>
-<!--            <div class="time">-->
-<!--                Today at 11:41-->
-<!--            </div>-->
-<!--            <div class="message me">-->
-<!--                <div class="from">Anuj</div>-->
-<!--                Hey, man! What's up, Mr Stark? 👋-->
-<!--            </div>-->
-<!--            <div class="message">-->
-<!--                <div class="from">Akk</div>-->
-<!--                Kid, where'd you come from?-->
-<!--            </div>-->
-<!--            <div class="message me">-->
-<!--                Field trip! 🤣-->
-<!--            </div>-->
-<!--            <div class="message me">-->
-<!--                Uh, what is this guy's problem, Mr. Stark? 🤔-->
-<!--            </div>-->
-<!--            <div class="message">-->
-<!--                Uh, he's from space, he came here to steal a necklace from a wizard.-->
-<!--            </div>-->
-            <div id="typing">
-                <div class="message">
-                    <div class="typing typing-1"></div>
-                    <div class="typing typing-2"></div>
-                    <div class="typing typing-3"></div>
+            <div class="messages" id="messages">
+                <div id="message-list">
+
                 </div>
-            </div>
+    <!--            <div class="time">-->
+    <!--                Today at 11:41-->
+    <!--            </div>-->
+                <div id="typing">
+                    <div class="message">
+                        <div class="typing typing-1"></div>
+                        <div class="typing typing-2"></div>
+                        <div class="typing typing-3"></div>
+                    </div>
+                </div>
 
-        </div>
-        <div class="input">
-            <i class="fas fa-camera"></i>
-            <i class="far fa-laugh-beam"></i>
-            <input placeholder="Type your message here!" type="text" title="message" id="input-message"/>
-            <i class="fas fa-paper-plane" id="btn-send"></i>
+            </div>
+            <div class="input">
+                <i class="fas fa-camera"></i>
+                <i class="far fa-laugh-beam"></i>
+                <input placeholder="Type your message here!" type="text" title="message" id="input-message"/>
+                <i class="fas fa-paper-plane" id="btn-send"></i>
+            </div>
         </div>
     </div>
 
-    <div class="rooms" id="rooms">
+    <div class="rooms d-none" id="rooms">
         <i class="action-icon new-room-btn fas fa-house-user fa-2x" title="New room"></i>
         <h2 class="">Rooms</h2>
 
