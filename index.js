@@ -181,7 +181,7 @@ io.on('connection', (socket) => {
             // functions.updateContact(io, socket, users);
             socket.emit('rooms update', rooms);
         } else {
-            socket.emit('invalid user');
+            return socket.emit('invalid user');
         }
 
         // if (fI > -1) {
@@ -290,6 +290,7 @@ io.on('connection', (socket) => {
         if (!socket.user) {
             console.log('Invalid user: ', socket.user);
             socket.emit('invalid user');
+            return false;
         }
 
         // In case of validation error
