@@ -21,9 +21,11 @@ const noRoom = $('#no-room');
 const roomsItem = $('#rooms-item');
 const noContact = $('#no-contact');
 const chatUserAvatar = $('#chat-user-avatar');
+const typingBlock = $('#typing');
 
 const btnSend = $('#btn-send');
 const inputMessage = $('#input-message');
+const body = $('body');
 
 blockChatUser.hide();
 
@@ -60,6 +62,55 @@ function joinChat() {
     blockJoinChat.show();
 }
 
+function timeSince(date) {
+
+    date = new Date(date);
+
+    const seconds = Math.floor((new Date() - date) / 1000);
+
+    let interval = seconds / 31536000;
+
+    if (interval > 1) {
+        return Math.floor(interval) + " years";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+        return Math.floor(interval) + " months";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+        return Math.floor(interval) + " days";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+        return Math.floor(interval) + " hours";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+        return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+}
+
+function updateChatScroll() {
+    const elem = document.getElementById('messages');
+    elem.scrollTop = elem.scrollHeight;
+}
+
+function submitMessage(socket) {
+    const message = inputMessage.val();
+    if (!message) {
+        return alert('Please enter message');
+    }
+
+    socket.emit('send message', {
+        message: message
+    });
+
+    // Set input message to blank
+    inputMessage.val('');
+}
+
 $(function () {
 
     // Hide room list
@@ -67,6 +118,10 @@ $(function () {
     noRoom.show();
     contactsList.hide();
     noContact.show();
+    typingBlock.hide();
+
+    // document.querySelectorAll('.timestamp').timeago();
+    // timeago().render(document.querySelectorAll('.need_to_be_rendered'));
 
     // deleteKey();
     const socket = io();
@@ -147,14 +202,20 @@ $(function () {
 
     socket.on('chat update', (messages) => {
         console.log('messages received: ', messages);
+        messageList.html('');
         for (let i = 0; i < messages.length; i++) {
-            messageList.append(
-                '<div class="message">' +
-                messages[i].from !== getKey() ? '<div class="from">' + messages[i].from + '</div>' : '' +
-                '<div class="text">'+ messages[i].message +'</div>' +
-                '</div>'
-            )
+
+            const msg = '<div class="message ' + (messages[i].from.nickname === getKey() ? 'me' : '') +'">' +
+                '<div class="text">'+
+                (messages[i].from.nickname !== getKey() ? `<div class="from" style="color: ${messages[i].from['color']}">` + messages[i].from.display_name + `</div>` : '') +
+                messages[i].message +'</div>' +
+                '<div class="timestamp" title="'+messages[i].sent+'">' + timeSince(messages[i].sent) +' ago</div>' +
+                '</div>';
+
+            messageList.append(msg)
         }
+
+        updateChatScroll();
     });
 
     socket.on('send message error', (data) => {
@@ -163,8 +224,8 @@ $(function () {
 
     socket.on('room joined', (data) => {
         console.log('You joined the room: ', data);
-        $('body').find('.room').removeClass('selected');
-        $('body').find('.room.' + data.name).addClass('selected');
+        body.find('.room').removeClass('selected');
+        body.find('.room.' + data.name).addClass('selected');
         // $('.room').removeClass('selected');
         // $(`.room.${data.name}`).addClass('selected');
     });
@@ -233,7 +294,7 @@ $(function () {
         joinChat();
     });
 
-    logoutBtn.click((e) => {
+    logoutBtn.click(() => {
        socket.emit('logout');
     });
 
@@ -246,17 +307,27 @@ $(function () {
         console.log('room create error: ', data);
     });
 
-    btnSend.click(() => {
-        console.log('send button clicked..');
-        const message = inputMessage.val();
-        console.log('message is: ', message);
-        if (!message) {
-            return alert('Please enter message');
+    socket.on('typing start', () => {
+        typingBlock.show();
+    });
+
+    socket.on('typing stop', () => {
+        typingBlock.hide();
+    });
+
+    inputMessage.keydown((e) => {
+        if (inputMessage.val()) {
+            socket.emit('typing');
         }
 
-        socket.emit('send message', {
-            message: message
-        });
+        if (e.which === 13) {
+            submitMessage(socket);
+            console.log('you pressed enter');
+        }
+    });
+    btnSend.click(() => {
+        console.log('send button clicked..');
+        submitMessage(socket);
     });
 
     $('#room-join-submit').click((e) => {

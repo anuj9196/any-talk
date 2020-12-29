@@ -5,6 +5,7 @@ const io = require('socket.io')(http);
 const validate = require('validate.js');
 const validator = require('./validators/validator');
 const utils = require('./utils/utils');
+const constants = require('./utils/constants');
 const functions = require('./functions');
 
 const PORT = process.env.PORT || 3000;
@@ -36,6 +37,7 @@ function joinRoom(io, socket, room) {
 
     console.log('users in room: ', usersInRooms);
     updateContacts(io, socket);
+    io.to(socket.room.name).emit('chat update', getMessages(io, socket));
     // const usersList = usersInRooms.filter(_ => {return _.room_name === room.name}).map(_ => _.user_nickname);
     // const roomUsers = users.filter(_ => {
     //     return usersList.includes(_.nickname);
@@ -75,6 +77,20 @@ function getMessages(io, socket) {
         // ) && m.room === socket.room.name;
         return m.room === socket.room.name;
     });
+
+
+    // const newList = [];
+    // for (let i = 0; i < mF.length; i++) {
+    //     newList.push(Object.assign(mF[i], {
+    //         from: mF[i].from ? users.filter(_ => _.nickname === mF[i].from)[0] : null
+    //     }))
+    // }
+    // mF.forEach(m => {
+    //
+    // })
+
+    // console.log('new list: ', newList);
+
     console.log('new msg list: ', mF);
     return mF;
 }
@@ -123,18 +139,17 @@ io.on('connection', (socket) => {
         console.log('sent: ', new Date());
         if (socket.room) {
             messageList.push({
-                from: socket.user.nickname,
+                from: socket.user,
                 // to: socket.chat,
                 room: socket.room.name,
                 sent: new Date(),
                 message: data.message
             });
             io.to(socket.room.name).emit('chat update', getMessages(io, socket));
+            socket.to(socket.room.name).emit('typing stop');
         } else {
             socket.emit('send message error', 'Please join/create a room first');
         }
-
-
     });
 
     // Validate user
@@ -207,6 +222,11 @@ io.on('connection', (socket) => {
        // }
     });
 
+    // On typing event
+    socket.on('typing', () => {
+        socket.to(socket.room.name).emit('typing start');
+    });
+
     // Join new chat
     socket.on('join chat', (data) => {
         // Convert array to object
@@ -247,7 +267,8 @@ io.on('connection', (socket) => {
         Object.assign(user, {
             avatar: `https://i.pravatar.cc/100?img=${Object.keys(users).length}`,
             online: true,
-            id: socket.id
+            id: socket.id,
+            color: constants.colors[Math.floor(Math.random() * constants.colors.length)]
         });
         users.push(user);
         // users[socket.id] = user;

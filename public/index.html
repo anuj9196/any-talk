@@ -51,16 +51,16 @@
     </div>
 
     <div class="chat" id="chat">
-        <div class="contact bar">
-            <div class="pic stark"></div>
-            <div class="name">
-                Tony Stark
-            </div>
-            <div class="seen">
-                Today at 12:56
-            </div>
+        <div class="top-bar text-center">
+            <div class="name">Messages</div>
+<!--            <div class="seen">-->
+<!--                Today at 12:56-->
+<!--            </div>-->
         </div>
-        <div class="messages" id="message-list">
+        <div class="messages" id="messages">
+            <div id="message-list">
+
+            </div>
 <!--            <div class="time">-->
 <!--                Today at 11:41-->
 <!--            </div>-->
@@ -81,11 +81,14 @@
 <!--            <div class="message">-->
 <!--                Uh, he's from space, he came here to steal a necklace from a wizard.-->
 <!--            </div>-->
-            <div class="message stark">
-                <div class="typing typing-1"></div>
-                <div class="typing typing-2"></div>
-                <div class="typing typing-3"></div>
+            <div id="typing">
+                <div class="message">
+                    <div class="typing typing-1"></div>
+                    <div class="typing typing-2"></div>
+                    <div class="typing typing-3"></div>
+                </div>
             </div>
+
         </div>
         <div class="input">
             <i class="fas fa-camera"></i>
@@ -139,6 +142,7 @@
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/timeago.js/dist/timeago.min.js"></script>
 <script src="/js/script.js"></script>
 <!--<script src="/js/chat.js"></script>-->
 </body>

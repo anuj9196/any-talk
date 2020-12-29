@@ -14,6 +14,9 @@ exports.userRules = {
             minimum: 1,
             maximum: 10
         }
+    },
+    color: {
+        presence: false
     }
 };
 
